@@ -1,0 +1,23 @@
+# Các vùng WorldGuard cho phép nhận shard
+allowed-regions:
+  - "afk"
+  - "spawn"
+
+# Âm thanh khi nhận
+reward-sound: "BLOCK_AMETHYST_BLOCK_BREAK"
+
+# Phân cấp quyền hạn (Nhóm nào nằm trên sẽ được ưu tiên trước)
+groups:
+  aris:
+    permission: "aris.shards"
+    interval: 30
+    amount: 2
+  default:
+    permission: "default.shards"
+    interval: 60
+    amount: 1
+
+# Thông báo ActionBar (Hỗ trợ Hex Color)
+messages:
+  actionbar-progress: "&7Next shard in &#a303f9%time%s"
+  actionbar-reward: "&#a303f9+%amount% Shard"
