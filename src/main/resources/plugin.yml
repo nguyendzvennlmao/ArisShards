@@ -1,0 +1,15 @@
+name: "ArisShards"
+version: "6.3"
+main: "me.arismc.ArisShards"
+api-version: "1.20"
+folia-supported: true
+depend:
+  - "WorldGuard"
+softdepend:
+  - "PlaceholderAPI"
+commands:
+  shard:
+    description: "Lệnh quản lý Shards của Aris Network"
+    aliases:
+      - "shards"
+      - "as"
