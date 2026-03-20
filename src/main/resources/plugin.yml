@@ -1,9 +1,0 @@
-name: "ArisShards"
-version: "6.3"
-main: "me.arismc.ArisShards"
-api-version: "1.20"
-folia-supported: true
-depend:
-  - "WorldGuard"
-softdepend:
-  - "PlaceholderAPI"
