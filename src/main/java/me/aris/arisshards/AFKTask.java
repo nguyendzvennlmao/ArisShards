@@ -32,7 +32,8 @@ public class AFKTask {
                 if (currentlyIn) {
                     if (!inRegion.contains(uuid)) {
                         inRegion.add(uuid);
-                        player.sendMessage(plugin.getMessageManager().getMessage("enter-region"));
+                        String sub = plugin.getMessageManager().getMessageOnly("enter-region-subtitle");
+                        player.sendTitle("", sub, 10, 40, 10);
                         playSound(player, "enter-region");
                     }
                     int current = timers.getOrDefault(uuid, 0) + 1;
@@ -46,7 +47,8 @@ public class AFKTask {
                 } else if (inRegion.contains(uuid)) {
                     inRegion.remove(uuid);
                     timers.remove(uuid);
-                    player.sendMessage(plugin.getMessageManager().getMessage("exit-region"));
+                    String sub = plugin.getMessageManager().getMessageOnly("exit-region-subtitle");
+                    player.sendTitle("", sub, 10, 40, 10);
                     playSound(player, "exit-region");
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
                 }
@@ -56,14 +58,18 @@ public class AFKTask {
 
     private boolean isInRegion(Player player) {
         List<String> regions = plugin.getConfig().getStringList("regions");
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionQuery query = container.createQuery();
-        return query.getApplicableRegions(BukkitAdapter.adapt(player.getLocation())).getRegions()
-                .stream().anyMatch(r -> regions.contains(r.getId()));
+        if (regions == null || regions.isEmpty()) return false;
+        try {
+            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+            RegionQuery query = container.createQuery();
+            return query.getApplicableRegions(BukkitAdapter.adapt(player.getLocation())).getRegions()
+                    .stream().anyMatch(r -> regions.contains(r.getId()));
+        } catch (Exception ignored) { return false; }
     }
 
     private int getTimeLeft(Player player, int current) {
         ConfigurationSection tiers = plugin.getConfig().getConfigurationSection("tiers");
+        if (tiers == null) return 0;
         for (String key : tiers.getKeys(false)) {
             if (player.hasPermission(tiers.getString(key + ".permission"))) {
                 return Math.max(0, tiers.getInt(key + ".time") - current);
@@ -74,6 +80,7 @@ public class AFKTask {
 
     private void giveReward(Player player) {
         ConfigurationSection tiers = plugin.getConfig().getConfigurationSection("tiers");
+        if (tiers == null) return;
         for (String key : tiers.getKeys(false)) {
             if (player.hasPermission(tiers.getString(key + ".permission"))) {
                 int amount = tiers.getInt(key + ".amount");
@@ -99,4 +106,4 @@ public class AFKTask {
         String msg = plugin.getMessageManager().getMessageOnly("actionbar-afk").replace("%time%", String.valueOf(time));
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(msg));
     }
-                          }
+                        }
