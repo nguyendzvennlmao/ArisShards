@@ -1,0 +1,11 @@
+name: ArisShards
+version: 1.0
+main: me.aris.arisshards.ArisShards
+api-version: '1.20'
+folia-supported: true
+author: VennLMAO
+depend: [PlaceholderAPI, WorldGuard]
+commands:
+  arisshards:
+    description: Lenh chinh cua ArisShards
+    permission: arisshards.admin
