@@ -1,0 +1,34 @@
+prefix: "&dShards &8» "
+regions:
+  - "afk"
+  - "afk1"
+tiers:
+  arisgod_plus:
+    permission: "arisgod+.shards"
+    time: 30
+    amount: 500
+  arisgod:
+    permission: "arisgod.shards"
+    time: 45
+    amount: 300
+  aris_plus:
+    permission: "aris+.shards"
+    time: 60
+    amount: 150
+  aris:
+    permission: "aris.shards"
+    time: 90
+    amount: 100
+  default:
+    permission: "default.shards"
+    time: 120
+    amount: 50
+sounds:
+  receive-shards: "BLOCK_AMETHYST_BLOCK_BREAK"
+  enter-region: "ENTITY_EXPERIENCE_ORB_PICKUP"
+  exit-region: "ENTITY_VILLAGER_NO"
+amount-format:
+  k: "K"
+  m: "M"
+  b: "B"
+  t: "T"
