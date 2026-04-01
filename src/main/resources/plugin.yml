@@ -7,5 +7,5 @@ author: VennLMAO
 depend: [PlaceholderAPI, WorldGuard]
 commands:
   arisshards:
-    description: Lenh chinh cua ArisShards
+    description: Lenh quan tri Shards
     permission: arisshards.admin
