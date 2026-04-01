@@ -1,6 +1,8 @@
 package me.aris.arisshards;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,9 +15,12 @@ public class ColorUtils {
         StringBuffer buffer = new StringBuffer();
         while (matcher.find()) {
             String hexCode = matcher.group(1);
-            ChatColor color = ChatColor.of("#" + hexCode);
-            matcher.appendReplacement(buffer, color.toString());
+            matcher.appendReplacement(buffer, ChatColor.of("#" + hexCode).toString());
         }
         return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+    }
+
+    public static BaseComponent[] getFormatted(String message) {
+        return TextComponent.fromLegacyText(color(message));
     }
 }
