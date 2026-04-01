@@ -5,7 +5,6 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -33,7 +32,7 @@ public class AFKTask {
                     if (!inRegion.contains(uuid)) {
                         inRegion.add(uuid);
                         String sub = plugin.getMessageManager().getMessageOnly("enter-region-subtitle");
-                        player.sendTitle("", sub, 10, 40, 10);
+                        player.sendTitle("", ColorUtils.color(sub), 10, 40, 10);
                         playSound(player, "enter-region");
                     }
                     int current = timers.getOrDefault(uuid, 0) + 1;
@@ -48,9 +47,9 @@ public class AFKTask {
                     inRegion.remove(uuid);
                     timers.remove(uuid);
                     String sub = plugin.getMessageManager().getMessageOnly("exit-region-subtitle");
-                    player.sendTitle("", sub, 10, 40, 10);
+                    player.sendTitle("", ColorUtils.color(sub), 10, 40, 10);
                     playSound(player, "exit-region");
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""));
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, ColorUtils.getFormatted(""));
                 }
             }
         }, 1, 1, java.util.concurrent.TimeUnit.SECONDS);
@@ -58,13 +57,13 @@ public class AFKTask {
 
     private boolean isInRegion(Player player) {
         List<String> regions = plugin.getConfig().getStringList("regions");
-        if (regions == null || regions.isEmpty()) return false;
+        if (regions == null) return false;
         try {
             RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
             RegionQuery query = container.createQuery();
             return query.getApplicableRegions(BukkitAdapter.adapt(player.getLocation())).getRegions()
                     .stream().anyMatch(r -> regions.contains(r.getId()));
-        } catch (Exception ignored) { return false; }
+        } catch (Exception e) { return false; }
     }
 
     private int getTimeLeft(Player player, int current) {
@@ -86,7 +85,7 @@ public class AFKTask {
                 int amount = tiers.getInt(key + ".amount");
                 plugin.getDataManager().setShards(player.getUniqueId(), plugin.getDataManager().getShards(player.getUniqueId()) + amount);
                 String sub = plugin.getMessageManager().getMessageOnly("receive-subtitle").replace("%amount%", String.valueOf(amount));
-                player.sendTitle("", sub, 10, 40, 10);
+                player.sendTitle("", ColorUtils.color(sub), 10, 40, 10);
                 playSound(player, "receive-shards");
                 break;
             }
@@ -104,6 +103,6 @@ public class AFKTask {
 
     private void sendActionBar(Player player, int time) {
         String msg = plugin.getMessageManager().getMessageOnly("actionbar-afk").replace("%time%", String.valueOf(time));
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(msg));
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, ColorUtils.getFormatted(msg));
     }
                         }
