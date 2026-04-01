@@ -17,10 +17,19 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 0) {
+            if (!(sender instanceof Player)) return true;
+            Player p = (Player) sender;
+            int bal = plugin.getDataManager().getShards(p.getUniqueId());
+            p.sendMessage(plugin.getMessageManager().getMessage("balance-message").replace("%amount%", String.valueOf(bal)));
+            return true;
+        }
+
         if (!sender.hasPermission("arisshards.admin")) {
             sender.sendMessage(plugin.getMessageManager().getMessage("no-permission"));
             return true;
         }
+
         if (args.length < 2) {
             sender.sendMessage(plugin.getMessageManager().getMessage("usage"));
             return true;
@@ -55,6 +64,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                 plugin.getDataManager().setShards(target.getUniqueId(), 0);
                 sender.sendMessage(plugin.getMessageManager().getMessage("reset-success").replace("%player%", target.getName()));
                 break;
+            default:
+                sender.sendMessage(plugin.getMessageManager().getMessage("usage"));
+                break;
         }
         return true;
     }
@@ -62,11 +74,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> list = new ArrayList<>();
+        if (!sender.hasPermission("arisshards.admin")) return list;
         if (args.length == 1) {
-            for (String s : Arrays.asList("give", "take", "reset")) if (s.startsWith(args[0].toLowerCase())) list.add(s);
+            for (String s : Arrays.asList("give", "take", "reset")) {
+                if (s.startsWith(args[0].toLowerCase())) list.add(s);
+            }
         } else if (args.length == 2) {
-            for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase().startsWith(args[1].toLowerCase())) list.add(p.getName());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().toLowerCase().startsWith(args[1].toLowerCase())) list.add(p.getName());
+            }
         }
         return list;
     }
-    }
+}
